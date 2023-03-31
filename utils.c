@@ -5,7 +5,7 @@
 #include <math.h>
 #include <time.h>
 #include "kernels.h"
-#include "mkl.h"
+
 void print_vector(double *vec, int n){
     int i;
     for (i = 0; i < n; i++){
@@ -84,8 +84,8 @@ bool verify_matrix(double *mat1, double *mat2, int n){
     return true;
 }
 
-void test_mkl(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    cblas_dgemm(CblasColMajor, CblasNoTrans,CblasNoTrans,m,n,k,alpha,A,m,B,k,beta,C,m);
+void test_mydgemm_v0(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
+    mydgemm_cpu_v0(m,n,k,alpha,A,m,B,k,beta,C,m);
 }
 
 void test_mydgemm_v1(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
@@ -120,53 +120,13 @@ void test_mydgemm_v8(int m,int n,int k,double alpha,double *A,double *B,double b
     mydgemm_cpu_v8(m,n,k,alpha,A,m,B,k,beta,C,m);
 }
 
-void test_mydgemm_v9(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v9(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v10(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v10(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v11(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v11(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v12(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v12(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v13(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v13(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v14(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v14(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v15(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v15(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v16(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v16(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v17(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v17(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v18(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v18(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
-
-void test_mydgemm_v19(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
-    mydgemm_cpu_v19(m,n,k,alpha,A,m,B,k,beta,C,m);
-}
+// void test_mydgemm_v9(int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
+//     mydgemm_cpu_v9(m,n,k,alpha,A,m,B,k,beta,C,m);
+// }
 
 void test_kernel(int kernel_num,int m,int n,int k,double alpha,double *A,double *B,double beta,double *C){
     switch (kernel_num){
-        case 0: test_mkl(m,n,k,alpha,A,B,beta,C); break;
+        case 0: test_mydgemm_v0(m,n,k,alpha,A,B,beta,C); break;        
         case 1: test_mydgemm_v1(m,n,k,alpha,A,B,beta,C); break;
         case 2: test_mydgemm_v2(m,n,k,alpha,A,B,beta,C); break;
         case 3: test_mydgemm_v3(m,n,k,alpha,A,B,beta,C); break;
@@ -175,17 +135,7 @@ void test_kernel(int kernel_num,int m,int n,int k,double alpha,double *A,double 
         case 6: test_mydgemm_v6(m,n,k,alpha,A,B,beta,C); break;
         case 7: test_mydgemm_v7(m,n,k,alpha,A,B,beta,C); break;
         case 8: test_mydgemm_v8(m,n,k,alpha,A,B,beta,C); break;
-        case 9: test_mydgemm_v9(m,n,k,alpha,A,B,beta,C); break;
-        case 10: test_mydgemm_v10(m,n,k,alpha,A,B,beta,C); break;
-        case 11: test_mydgemm_v11(m,n,k,alpha,A,B,beta,C); break;
-        case 12: test_mydgemm_v12(m,n,k,alpha,A,B,beta,C); break;
-        case 13: test_mydgemm_v13(m,n,k,alpha,A,B,beta,C); break;
-        case 14: test_mydgemm_v14(m,n,k,alpha,A,B,beta,C); break;
-        case 15: test_mydgemm_v15(m,n,k,alpha,A,B,beta,C); break;
-        case 16: test_mydgemm_v16(m,n,k,alpha,A,B,beta,C); break;
-        case 17: test_mydgemm_v17(m,n,k,alpha,A,B,beta,C); break;
-        case 18: test_mydgemm_v18(m,n,k,alpha,A,B,beta,C); break;
-        case 19: test_mydgemm_v19(m,n,k,alpha,A,B,beta,C); break;
-        default: break;
+        // case 9: test_mydgemm_v9(m,n,k,alpha,A,B,beta,C); break;
+        default: { printf("Invalid kernel id %d", kernel_num); exit(-3); }
     }
 }

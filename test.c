@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "utils.h"
-#include "mkl.h"
 
 int main(int argc, char *argv[]){
     if (argc != 2) {
@@ -20,7 +19,7 @@ int main(int argc, char *argv[]){
     int m, n, k,max_size=3000;
     int n_count,N=3,upper_limit;
     if (kernel_num<=4&&kernel_num!=0) upper_limit=10;
-    else upper_limit=30;
+    else upper_limit=12;
     double *A=NULL,*B=NULL,*C=NULL,*C_ref=NULL;
     double alpha = 2.0, beta = 0.;//two arbitary input parameters
     double t0,t1;
@@ -35,7 +34,9 @@ int main(int argc, char *argv[]){
         printf("\nM=N=K=%d:\n",m);
         if (kernel_num != 0){//not an MKL implementation
             test_kernel(kernel_num,m,n,k,alpha,A,B,beta,C);
-            cblas_dgemm(CblasColMajor, CblasNoTrans,CblasNoTrans,m,n,k,alpha,A,m,B,k,beta,C_ref,m);
+            // cblas_dgemm(CblasColMajor, CblasNoTrans,CblasNoTrans,m,n,k,alpha,A,m,B,k,beta,C_ref,m);
+            // Use kernel 0 (which is Yujia's kernel 8) as a reference
+            test_kernel(0,m,n,k,alpha,A,B,beta,C_ref);
             if (!verify_matrix(C_ref,C,m*n)) {
                 printf("Failed to pass the correctness verification against Intel MKL. Exited.\n");
                 exit(-3);

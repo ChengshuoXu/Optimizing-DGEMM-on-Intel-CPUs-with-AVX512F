@@ -1,5 +1,9 @@
 rm res*
-for i in {0..19..1}
+
+start=$1
+end=$2
+
+for ((i=$start;i<=$end;i++))
 do
 	export MKL_NUM_THREADS=1
 	export OMP_NUM_THREADS=1
